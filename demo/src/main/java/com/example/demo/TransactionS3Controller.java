@@ -31,7 +31,7 @@ public class TransactionS3Controller {
     @RequestMapping(value = "/customer/transactions/{id}", method= RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String test2(@PathVariable String id){
-        BasicAWSCredentials awsCreds = new BasicAWSCredentials("AKIAJNW2OMFZN2K63JOA", "9T8jcqg9wL+XftqJXZ6Z3Uh/OwBjbLPNAYqfK4+e");
+        BasicAWSCredentials awsCreds = new BasicAWSCredentials("*******", "*******");
         final AmazonS3 s3 = AmazonS3Client.builder().withCredentials(new AWSStaticCredentialsProvider(awsCreds))
                 .withRegion("us-east-1").build();
         StringBuilder stringBuilder = new StringBuilder();
