@@ -21,14 +21,14 @@ import org.springframework.web.bind.annotation.*;
 import java.io.*;
 
 @RestController
-public class TestController {
+public class TransactionS3Controller {
 
     @RequestMapping("/test")
     public void test(){
         System.out.println("this is a test app ");
     }
 
-    @RequestMapping(value = "/test/get/{id}", method= RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/customer/transactions/{id}", method= RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String test2(@PathVariable String id){
         BasicAWSCredentials awsCreds = new BasicAWSCredentials("AKIAJNW2OMFZN2K63JOA", "9T8jcqg9wL+XftqJXZ6Z3Uh/OwBjbLPNAYqfK4+e");
@@ -69,7 +69,7 @@ public class TestController {
 
 
 
-    @RequestMapping(value = "/test/create/{id}", method= RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/customer/transactions/{id}", method= RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public void test3(@PathVariable String id, @RequestBody JsonNode node){
 
         if (node != null){
