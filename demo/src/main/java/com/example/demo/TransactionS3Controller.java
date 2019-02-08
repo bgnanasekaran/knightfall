@@ -1,19 +1,15 @@
 package com.example.demo;
 
 import com.amazonaws.AmazonServiceException;
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.AWSCredentialsProvider;
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.regions.Region;
-import com.amazonaws.regions.RegionUtils;
-import com.amazonaws.regions.Regions;
+import com.amazonaws.auth.*;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.fasterxml.jackson.databind.JsonNode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,21 +18,25 @@ import java.io.*;
 @RestController
 public class TransactionS3Controller {
 
+    Logger LOGGER = LoggerFactory.getLogger(TransactionS3Controller.class);
+
     @RequestMapping("/test")
     public void test(){
+        LOGGER.info("this is a test app ");
         System.out.println("this is a test app ");
     }
 
-    @RequestMapping(value = "/customer/transactions/{id}", method= RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/customer/transactions/{id}/{uuid}", method= RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String test2(@PathVariable String id){
-        BasicAWSCredentials awsCreds = new BasicAWSCredentials("*******", "*******");
-        final AmazonS3 s3 = AmazonS3Client.builder().withCredentials(new AWSStaticCredentialsProvider(awsCreds))
+    public String test2(@PathVariable String id, @PathVariable String uuid){
+        LOGGER.info("Fetching Transxns of loyalty id " + id + " with uuid " + uuid );
+        final AmazonS3 s3 = AmazonS3Client.builder().withCredentials(new DefaultAWSCredentialsProviderChain())
                 .withRegion("us-east-1").build();
+
         StringBuilder stringBuilder = new StringBuilder();
         try {
-            String fileName = id + ".json";
-            S3Object o = s3.getObject("bharanibucket", fileName);
+            String fileName = id + "/"+ uuid + ".json";
+            S3Object o = s3.getObject("*****", fileName);
             S3ObjectInputStream s3is = o.getObjectContent();
             BufferedReader reader = new BufferedReader(new InputStreamReader(s3is));
             String line = null;
@@ -74,8 +74,7 @@ public class TransactionS3Controller {
     public void test3(@PathVariable String id, @RequestBody JsonNode node){
         LOGGER.info("adding Transxns of loyalty id " + id );
         if (node != null){
-            BasicAWSCredentials awsCreds = new BasicAWSCredentials("*******", "*******");
-            final AmazonS3 s3 = AmazonS3Client.builder().withCredentials(new AWSStaticCredentialsProvider(awsCreds))
+            final AmazonS3 s3 = AmazonS3Client.builder().withCredentials(new DefaultAWSCredentialsProviderChain())
                     .withRegion("us-east-1").build();
             S3Object s3Object = new S3Object();
             ObjectMetadata objectMetadata = new ObjectMetadata();
