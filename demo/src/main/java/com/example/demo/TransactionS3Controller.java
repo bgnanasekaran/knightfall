@@ -18,7 +18,7 @@ import java.util.List;
 @RestController
 public class TransactionS3Controller {
 
-    Logger LOGGER = LoggerFactory.getLogger(TransactionS3Controller.class);
+    private Logger LOGGER = LoggerFactory.getLogger(TransactionS3Controller.class);
 
     @RequestMapping("/test")
     public void test(){
@@ -45,7 +45,7 @@ public class TransactionS3Controller {
             S3Object o = s3.getObject("*****", fileName);
             S3ObjectInputStream s3is = o.getObjectContent();
             BufferedReader reader = new BufferedReader(new InputStreamReader(s3is));
-            String line = null;
+            String line;
             LOGGER.info("fetching Transxns in progress");
             while ((line = reader.readLine()) != null) {
                 stringBuilder.append(line);
@@ -94,7 +94,7 @@ public class TransactionS3Controller {
                     String uuid = headerNode.get("uuid").asText();
                     String fileName = id + "/" + uuid + ".json";
                     s3Object.setObjectMetadata(objectMetadata);
-                    s3.putObject("******", fileName, node.asText());
+                    s3.putObject("******", fileName, node.toString());
                     LOGGER.info("added Transxns of id " + uuid + " for loyalty id " + id + " successfully" );
                 }
             }
