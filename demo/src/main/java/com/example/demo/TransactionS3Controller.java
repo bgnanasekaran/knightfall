@@ -4,9 +4,8 @@ import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.*;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.S3Object;
-import com.amazonaws.services.s3.model.S3ObjectInputStream;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.*;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.*;
+import java.util.List;
 
 @RestController
 public class TransactionS3Controller {
@@ -24,6 +24,12 @@ public class TransactionS3Controller {
     public void test(){
         LOGGER.info("this is a test app ");
         System.out.println("this is a test app ");
+        final AmazonS3 s3 = AmazonS3ClientBuilder.defaultClient();
+        ListObjectsV2Result result = s3.listObjectsV2("******");
+        List<S3ObjectSummary> objects = result.getObjectSummaries();
+        for (S3ObjectSummary os: objects) {
+        LOGGER.info("* " + os.getKey());
+        }
     }
 
     @RequestMapping(value = "/customer/transactions/{id}/{uuid}", method= RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -64,6 +70,7 @@ public class TransactionS3Controller {
             stringBuilder.append('"'+ e.getMessage() + '"' + "\n" );
             stringBuilder.append("}");
         }
+        LOGGER.info(stringBuilder.toString());
         return stringBuilder.toString();
 
     }
