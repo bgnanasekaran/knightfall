@@ -10,7 +10,6 @@ import com.amazonaws.regions.RegionUtils;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
@@ -41,9 +40,11 @@ public class TransactionS3Controller {
             S3ObjectInputStream s3is = o.getObjectContent();
             BufferedReader reader = new BufferedReader(new InputStreamReader(s3is));
             String line = null;
+            LOGGER.info("fetching Transxns in progress");
             while ((line = reader.readLine()) != null) {
                 stringBuilder.append(line);
             }
+            LOGGER.info("fetched Transxns successfully");
         } catch (AmazonServiceException e) {
             stringBuilder.append("{\n");
             stringBuilder.append('"'+ "error" + '"' );
@@ -71,7 +72,7 @@ public class TransactionS3Controller {
 
     @RequestMapping(value = "/customer/transactions/{id}", method= RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public void test3(@PathVariable String id, @RequestBody JsonNode node){
-
+        LOGGER.info("adding Transxns of loyalty id " + id );
         if (node != null){
             BasicAWSCredentials awsCreds = new BasicAWSCredentials("*******", "*******");
             final AmazonS3 s3 = AmazonS3Client.builder().withCredentials(new AWSStaticCredentialsProvider(awsCreds))
@@ -81,12 +82,14 @@ public class TransactionS3Controller {
             JsonNode txnNode = node.get("Transaction");
             if(txnNode != null)
             {
+                LOGGER.info("adding Transxns of loyalty id " + id + " in progress" );
                 JsonNode headerNode = txnNode.get("header");
                 if(headerNode != null) {
                     String uuid = headerNode.get("uuid").asText();
                     String fileName = id + "/" + uuid + ".json";
                     s3Object.setObjectMetadata(objectMetadata);
-                    s3.putObject("bharanibucket", fileName, node.asText());
+                    s3.putObject("******", fileName, node.asText());
+                    LOGGER.info("added Transxns of id " + uuid + " for loyalty id " + id + " successfully" );
                 }
             }
         }
