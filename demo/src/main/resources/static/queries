@@ -1,0 +1,16 @@
+select * from test_txn_1 where transaction.header.uuid='e308aa13-585a-4ee3-9226-eaa26be3a603'
+
+
+CREATE EXTERNAL TABLE test_txn_1 (
+ Transaction struct<header:
+   struct<uuid:string,
+              type:string,
+              created:string,
+              modified:string,
+              alias:string,
+              transient:string,
+		sku:string>
+              >
+  )
+ROW FORMAT SERDE 'org.openx.data.jsonserde.JsonSerDe'
+LOCATION 's3://bucketName/folderName'
