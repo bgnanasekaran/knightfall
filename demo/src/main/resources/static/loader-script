@@ -1,29 +1,42 @@
-curl -X PUT http://localhost:9000/customer/transactions/3301346138 \
-  -H 'cache-control: no-cache' \
-  -H 'content-type: application/json' \
-  -H 'request_id: postman' \
-  -d '{
-   "Transaction":{
-      "header":{
-         "uuid":"7e6fa8ef-05c2-11e6-9b0f-0050568f619",
-         "type":"store-transaction",
-         "created":1461024358442,
-         "modified":1461024358442,
-         "alias":"245^20160408^63^8794",
-         "transient":false,
-         "base-type":"transaction",
-         "begin-date":1460162418000,
-         "end-date":1460162620000,
-         "name":"245^20160408^63^8794",
-         "net-total":148.56,
-         "reg-transaction-id":8794,
-         "sale-type":"61",
-         "sales-tax":0.0,
-         "source-begin-date":"2016-04-08T19:40:18.000000-05:00",
-         "source-end-date":"2016-04-08T19:43:40.000000-05:00",
-         "store-id":245,
-         "tags":"transaction:245^20160408^63^8794",
-         "workstation-id":63
-      }
-   }
-}'
+import requests
+import uuid
+from random import randint
+
+url = 'http://localhost:9000/customer/transactions/3301346205-100'
+
+for lt in range(100):
+    print ('run time ' + `lt` )
+    uuidstr = str(uuid.uuid4());
+
+    tgdata = """{
+        "Transaction":{
+           "header":{
+              "uuid":"%s",
+              "type":"store-transaction",
+              "created":1461024358442,
+              "modified":1461024358442,
+              "alias":"245^20160408^63^8794",
+              "transient":false,
+              "base-type":"transaction",
+              "begin-date":1460162418000,
+              "end-date":1460162620000,
+              "name":"245^20160408^63^8794",
+              "net-total":148.56,
+              "reg-transaction-id":8794,
+              "sale-type":"61",
+              "sales-tax":0.0,
+              "source-begin-date":"2016-04-08T19:40:18.000000-05:00",
+              "source-end-date":"2016-04-08T19:43:40.000000-05:00",
+              "store-id":245,
+              "tags":"transaction:245^20160408^63^8794",
+              "workstation-id":63,
+              "sku":"%s"
+          }
+       }
+    }""" % (uuidstr, randint(1000, 2000))
+
+    response = requests.put(url, data=tgdata,headers={"Content-Type": "application/json"})
+
+    print(response.status_code)
+
+print ('end')
