@@ -134,7 +134,7 @@ public class TransactionParquetController {
             conf.set("fs.s3a.access.key", accessKey);
             conf.set("fs.s3a.secret.key", secretKey);
         } else {
-            conf.set("fs.s3a.aws.credentials.provider", "org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider");
+            conf.set("fs.s3a.aws.credentials.provider", "com.amazonaws.auth.DefaultAWSCredentialsProviderChain");
         }
         return conf;
     }
