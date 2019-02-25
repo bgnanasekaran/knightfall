@@ -119,7 +119,8 @@ public class TransactionParquetController {
 
     private StringBuilder getPath(String id, String uuid) {
         StringBuilder pathBuilder = new StringBuilder();
-        pathBuilder.append("s3a://bharanibucket/");
+       // pathBuilder.append("s3a://bharanibucket/");
+        pathBuilder.append("s3a://bby-tgraph/");
         pathBuilder.append(id);
         pathBuilder.append("/");
         pathBuilder.append(uuid);
