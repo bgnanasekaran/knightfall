@@ -7,9 +7,13 @@ import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
+import org.apache.spark.sql.SparkSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -29,7 +33,7 @@ public class S3ServiceManager {
                 JsonNode headerNode = txnNode.get("header");
                 if(headerNode != null) {
                     String uuid = headerNode.get("uuid").asText();
-                    AtomicReference<String> fileName = new AtomicReference<>(id + "/" + uuid + ".parque");
+                    AtomicReference<String> fileName = new AtomicReference<>(id + "/" + uuid + ".parquet");
                     if(StringUtils.equals(fileFormat, "json")){
                         fileName.set(id + "/" + uuid + ".json");
                     }
@@ -46,7 +50,7 @@ public class S3ServiceManager {
     public String get(AmazonS3 s3Client, String id, String uuid, String fileFormat, String bucketName){
         StringBuilder stringBuilder = new StringBuilder();
         try {
-            AtomicReference<String> fileName = new AtomicReference<>(id + "/" + uuid + ".parque");
+            AtomicReference<String> fileName = new AtomicReference<>(id + "/" + uuid + ".parquet");
             if(StringUtils.equals(fileFormat, "json")){
                 fileName.set(id + "/" + uuid + ".json");
             }
@@ -71,5 +75,14 @@ public class S3ServiceManager {
         }
         LOGGER.info(stringBuilder.toString());
         return stringBuilder.toString();
+    }
+
+    public void sparkWrite(){
+
+        SparkSession sparkSession = SparkSession.builder().getOrCreate();
+        Dataset<Row> dataSet = sparkSession.emptyDataFrame();
+        dataSet.write().parquet("s3a://bharanibucket/test.parquet");
+
+
     }
 }
