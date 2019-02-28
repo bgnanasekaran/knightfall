@@ -9,9 +9,9 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-public class TransactionParquetController {
+public class HadoopAvroParquetS3Controller {
 
-    private Logger LOGGER = LoggerFactory.getLogger(TransactionParquetController.class);
+    private Logger LOGGER = LoggerFactory.getLogger(HadoopAvroParquetS3Controller.class);
 
     private S3ServiceManager serviceManager;
 

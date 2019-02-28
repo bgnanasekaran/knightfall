@@ -2,6 +2,7 @@ package com.example.controller;
 
 import com.amazonaws.services.s3.model.ParquetInput;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.GenericRecord;
@@ -15,7 +16,6 @@ import org.apache.parquet.hadoop.ParquetWriter;
 import org.apache.parquet.hadoop.metadata.CompressionCodecName;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Encoders;
-import org.apache.spark.sql.SaveMode;
 import org.apache.spark.sql.SparkSession;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -23,8 +23,8 @@ import org.joda.time.Days;
 import org.joda.time.MutableDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -36,18 +36,17 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-public class TestS3Controller {
+public class SparkParquetS3Controller {
 
-    private Logger LOGGER = LoggerFactory.getLogger(TestS3Controller.class);
+    private Logger LOGGER = LoggerFactory.getLogger(SparkParquetS3Controller.class);
 
-    @RequestMapping("/test")
-    public void test() throws JsonProcessingException {
-        LOGGER.info("this is a test app ");
-        sparkWrite();
-      //  parquetWrite();
+    @RequestMapping(value = "/online/transactions/{id}", method= RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public void test(@PathVariable String id, @RequestBody JsonNode node, @RequestHeader(value="access_key", required = false) String accessKey, @RequestHeader(value="secret_key", required = false) String secretKey, @RequestHeader(value="bucket_name", required = false) String bucketName) {
+        LOGGER.info("Creating online transactions ");
+        //serviceManager.parquetCreate(id, node, accessKey, secretKey, bucketName);
     }
 
-    public void sparkWrite(){
+    public void sparkCreate(){
         SparkSession sparkSession = SparkSession.builder().master("local[*]").
                 config("spark.executor.extraJavaOptions", "-Dcom.amazonaws.services.s3.enableV4=true").getOrCreate();
 /*        SparkConf sparkConf = new SparkConf().setAppName("testApp");
