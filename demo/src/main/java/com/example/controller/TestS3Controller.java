@@ -57,14 +57,14 @@ public class TestS3Controller {
 /*        JavaSparkContext javaSparkContext = new JavaSparkContext(sparkSession.sparkContext());
         JavaRDD javaRDD = javaSparkContext.parallelize(stringList);
         Dataset<Row> dataSet  = sparkSession.createDataFrame(javaRDD, (StructType) Encoders.STRING());
-        dataSet.write().parquet("s3a://bharanibucket/test.parquet");
+        dataSet.write().parquet("s3a://bucketname/test.parquet");
         sparkSession.cr*/
         /*Dataset<Row> dataSet = sparkSession.createDataset("test data", Encoders.STRING());
         JavaSparkContext
-        dataSet.write().parquet("s3a://bharanibucket/test.parquet");
+        dataSet.write().parquet("s3a://bucketname/test.parquet");
         sparkSession.createDataFrame*/
        // sparkSession.sparkContext().setLocalProperty("com.amazonaws.services.s3.enableV4", "true");
-        //arn:aws:s3:::bharanibucket
+        //arn:aws:s3:::bucketname
         //sparkSession.sparkContext().hadoopConfiguration().set("fs.s3a.endpoint", "s3.amazonaws.com");
         sparkSession.sparkContext().hadoopConfiguration().set("fs.s3a.access.key", "**********");
         sparkSession.sparkContext().hadoopConfiguration().set("fs.s3a.secret.key", "**********");
@@ -73,7 +73,7 @@ public class TestS3Controller {
         sparkSession.sparkContext().hadoopConfiguration().set("fs.s3n.awsSecretAccessKey", "***********");*/
         try {
             Dataset dataSet = sparkSession.createDataset(stringList, Encoders.STRING());
-            dataSet.write().mode("append").parquet("s3a://bharanibucket/test123");
+            dataSet.write().mode("append").parquet("s3a://********/test123");
         } catch (Exception e){
             LOGGER.error("Error Msg", e);
         }
@@ -97,7 +97,7 @@ public class TestS3Controller {
                 "    ]" +
                 "}";
         String PATH_SCHEMA = "s3a";
-        Path internalPath = new Path(PATH_SCHEMA, "bharanibucket", "test");
+        Path internalPath = new Path(PATH_SCHEMA, "bucketname", "test");
         Schema schema = new Schema.Parser().parse(SCHEMA_TEMPLATE);
         Configuration configuration = new Configuration();
         AvroReadSupport.setRequestedProjection(configuration, schema);
