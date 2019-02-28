@@ -1,0 +1,17 @@
+# Create Table
+
+CREATE EXTERNAL TABLE sample_pq(
+`header.alias` STRING,
+`header.created` BIGINT,
+`header.modified` BIGINT,
+`header.sku` INT,
+`header.type` STRING,
+`header.uuid` STRING
+)
+STORED AS PARQUET
+LOCATION 's3://bucketname/foldername'
+tblproperties ("parquet.compress"="SNAPPY");
+
+
+# Select Table
+SELECT * FROM "sampledb"."sample_pq1" where "header.sku" in (387121)
