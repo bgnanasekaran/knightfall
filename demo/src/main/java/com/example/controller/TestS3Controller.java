@@ -66,8 +66,8 @@ public class TestS3Controller {
        // sparkSession.sparkContext().setLocalProperty("com.amazonaws.services.s3.enableV4", "true");
         //arn:aws:s3:::bharanibucket
         //sparkSession.sparkContext().hadoopConfiguration().set("fs.s3a.endpoint", "s3.amazonaws.com");
-        sparkSession.sparkContext().hadoopConfiguration().set("fs.s3a.access.key", "AKIAJK277WU5KMZQQQBQ");
-        sparkSession.sparkContext().hadoopConfiguration().set("fs.s3a.secret.key", "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");
+        sparkSession.sparkContext().hadoopConfiguration().set("fs.s3a.access.key", "**********");
+        sparkSession.sparkContext().hadoopConfiguration().set("fs.s3a.secret.key", "**********");
         /*sparkSession.sparkContext().hadoopConfiguration().set("fs.s3n.impl", "org.apache.hadoop.fs.s3native.NativeS3FileSystem");
         sparkSession.sparkContext().hadoopConfiguration().set("fs.s3n.awsAccessKeyId", "***********");
         sparkSession.sparkContext().hadoopConfiguration().set("fs.s3n.awsSecretAccessKey", "***********");*/
